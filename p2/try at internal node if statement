@@ -1,0 +1,56 @@
+  int i=0;// borrow=0;
+  BTreeNode* temp=0;
+  if(ptr)
+  {
+    //cout << "DELETE LEAF NODE\n";
+    //delete pointer to leaf and move around
+    for(i=0; i<count; i++)
+    {
+      if(children[i]==ptr)
+      {
+        for(i=pos; i<count ; i++)
+        {
+          temp = children[i];
+          children[i]=children[i+1];
+          children[i+1]=temp;
+        }
+        //cout << "FOUND LEAF TO DELETE\n";
+      }
+    }
+    //update keys
+    count--;
+
+    //BORROW OR MERGE?
+    if(count < (internalSize+1)/2)
+    {
+      // look left
+      if(leftSibling && leftSibling->getCount() > (internalSize+1)/2)
+      {
+        cout << "LEFT INTERNAL BORROW\n";
+      }
+
+      // look right
+      else if(rightSibling && rightSibling->getCount() > (internalSize+1)/2)
+      {
+        cout << "RIGHT INTERNAL BORROW\n";
+      }
+
+      // merge left
+      else if(leftSibling)
+      {
+        cout << "LEFT INTERNAL MERGE\n";
+      }
+      
+      // merge right
+      else if(rightSibling)
+      {
+        cout << "RIGHT INTERNAL MERGE\n";
+      }
+    
+    } // end total if borrow merge?
+
+  }
+  for(i=0; i<count; i++)
+    keys[i] = children[i]->getMinimum();
+  if(ptr==children[0] && parent)
+    parent->resetMinimum(this);
